@@ -3,9 +3,15 @@
 #include "logger.h"
 #include "viewer_iface.h"
 #include <iostream>
+#include <fstream>
+
+
+using namespace std;
 
 int main() {
     // Player State Primitives
+    
+
     int playerFloor = 1;
     int playerRoom = 1;
     int energy = INITIAL_ENERGY;
@@ -24,13 +30,14 @@ int main() {
     char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM];
     int entityCounts[NUM_FLOORS][ROOMS_PER_FLOOR] = { 0 };
 
-    const char* mapFile = "data/building.txt";
-    const char* initStateFile = "data/initial-state.txt";
+    const char* mapFile = "../../../data/building.txt";
+    const char* initStateFile = "../../../data/initial-state.txt";
 
     if (!loadBuildingMap(mapFile, horizontalConn, roomEntities, entityCounts)) {
         std::cerr << "Error: Could not load " << mapFile << "\n";
         return 1;
     }
+
 
     if (!loadInitialState(initStateFile, playerFloor, playerRoom, energy, time, score,
                           inventory, inventoryCount, objectives, emergencyTripsLeft)) {
@@ -46,5 +53,20 @@ int main() {
                   inventory, inventoryCount, objectives, emergencyTripsLeft,
                   horizontalConn, roomEntities, entityCounts);
 
+
+    
+
+    bool loaded = loadBuildingMap("../../../data/building.txt",
+        horizontalConn, roomEntities, entityCounts);
+
+    if (loaded)
+        cout << "Map loaded successfully!" << endl;
+    else
+        cout << "Failed to load map!" << endl;
+
+
     return 0;
+
+
+
 }

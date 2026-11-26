@@ -9,3 +9,6 @@ include_directories(include)
 file(GLOB CORE_SOURCES "src/core/*.cpp")
 
 add_executable(last_train ${CORE_SOURCES})
+
+set_property(TARGET last_train PROPERTY
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
