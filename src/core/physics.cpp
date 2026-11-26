@@ -1,5 +1,6 @@
 #include "physics.h"
 #include "util.h"
+#include "switches.h"
 
 // Movement validation and resource adjustments without structures
 
@@ -9,6 +10,9 @@ bool isDirectlyConnected(int fromF, int fromR, int toF, int toR,
     const char horizontalConn[NUM_FLOORS][ROOMS_PER_FLOOR - 1],
     char& outConnType)
 {
+
+    
+
     outConnType = CONN_NONE;
 
     if (fromF != toF)
@@ -90,24 +94,32 @@ bool isDirectlyConnected(int fromF, int fromR, int toF, int toR,
 
 }
 
-bool canTraverse(int targetFloor, int targetRoom, char connType,
+bool canTraverse(int fromFloor, int fromRoom, int targetFloor, int targetRoom, char connType,
     const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount,
     int emergencyTripsLeft, bool lift2Operational) 
 {
 
-    if (connType == CONN_DOOR)
+    if (connType == CONN_DOOR || connType == CONN_WINDOW ||
+        connType == CONN_STAIRCASE || connType == CONN_LIFT1)
         return true;
-    if (connType == CONN_WINDOW)
-        return true;
-    if (connType == CONN_STAIRCASE)
-        return true;
+
+   
     if (connType == CONN_SOLID_WALL)
         return false;
     if (connType == CONN_NONE)
         return false;
+   
+
+
+    if (connType == CONN_LOCKED_DOOR)
+        return (hasItem(inventory, inventoryCount, ENT_MASTER_KEY));
 
     
+    if (connType == CONN_LIFT2)
+        return lift2Operational || emergencyTripsLeft > 0;
 
+
+    return false;
 
 
 }
